@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title></title>
+<style>
+body {
+	width: 200px;
+	height: 100px;
+}
+
+ul, li {
+	margin: 0;
+	padding: 0;
+}
+
+p {
+	margin: 10px 0;
+	padding: 0;
+}
+
+#colors li {
+	list-style: none;
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	text-indent: -9999px;
+	border: 1px solid #000;
+	cursor: pointer;
+}
+#colors li.selected {
+	border-width: 3px;
+}
+#lineWidth {
+	width: 30px;
+}
+</style>
+</head>
+<ul id="colors">
+	<li class="selected">red</li>
+	<li>green</li>
+	<li>blue</li>
+	<li>yellow</li>
+	<li>grey</li>
+	<li>black</li>
+	<li>white</li>
+</ul>
+<p>line width: <input type="number" value="2" min="1" required id="lineWidth"></p>
+<p>
+	<button id="start">start</button>
+	<button id="end" disabled>end</button>
+</p>
+<body>
+<script>
+var lineWidth = document.getElementById("lineWidth");
+var colors = [].slice.call(document.querySelectorAll("#colors li"));
+var startBtn = document.getElementById("start");
+var endBtn = document.getElementById("end");
+var selectClassName = "selected";
+var isStart = false;
+
+function setColor(color) {
+	colors.forEach(function(li) {
+		li.innerText === color
+			? li.classList.add(selectClassName)
+			: li.classList.remove(selectClassName);
+	});
+}
+
+function getColor() {
+	return colors.filter(function(li) {
+		return li.classList.contains(selectClassName);
+	})[0].innerText;
+}
+
+function sendRequest(params, callback) {
+	if (typeof params === "function") {
+		callback = params;
+		params = {};
+	}
+	chrome.tabs.getSelected(null, function(tab) {
+		chrome.tabs.sendRequest(tab.id, params, callback);
+	});
+}
+
+sendRequest(function(response) {
+	if (response.isStart) {
+		isStart = true;
+		startBtn.disabled = true;
+		endBtn.disabled = false;
+		setColor(response.color);
+		lineWidth.value = response.lineWidth;
+	}
+});
+
+colors.forEach(function(li) {
+	var color = li.innerText;
+	li.style.backgroundColor = color;
+	li.addEventListener("click", function() {
+		setColor(color);
+		sendRequest({ action: "change", color: color });
+	});
+});
+
+lineWidth.addEventListener("input", function() {
+	sendRequest({ action: "change", lineWidth: lineWidth.value });
+});
+
+startBtn.addEventListener("click", function() {
+	sendRequest({
+		action: "start",
+		color: getColor(),
+		lineWidth: lineWidth.value
+	}, function() {
+		isStart = true;
+		window.close();
+	});
+});
+
+endBtn.addEventListener("click", function() {
+	sendRequest({ action: "end" }, function() {
+		isStart = false;
+		window.close();
+	});
+});
+</script>
+</body>
+</html>
