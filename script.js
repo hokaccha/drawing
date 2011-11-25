@@ -38,6 +38,11 @@ function onmouseup(e) {
 	drawing = false;
 }
 
+function onclick(e) {
+	e.preventDefault();
+	e.stopPropagation();
+}
+
 function onkeydown(e) {
 	if (e.keyCode === 27) { // Esc
 		action.end();
@@ -59,7 +64,8 @@ var action = {
     document.addEventListener("mousedown", onmousedown, true);
     document.addEventListener("mousemove", onmousemove, true);
     document.addEventListener("mouseup", onmouseup, true);
-    document.addEventListener("keydown", onkeydown, false);
+    document.addEventListener("keydown", onkeydown, true);
+    document.addEventListener("click", onclick, true);
     body.appendChild(canvas);
     isStart = true;
   },
@@ -75,7 +81,8 @@ var action = {
     document.removeEventListener("mousedown", onmousedown, true);
     document.removeEventListener("mousemove", onmousemove, true);
     document.removeEventListener("mouseup", onmouseup, true);
-    document.removeEventListener("keydown", onmouseup, false);
+    document.removeEventListener("keydown", onkeydown, true);
+    window.removeEventListener("onclick", onclick, true);
     body.removeChild(canvas);
     isStart = false;
   }
