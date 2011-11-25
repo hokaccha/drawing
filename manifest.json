@@ -1,6 +1,6 @@
 {
-    "name": "drawing"
-  , "description": "Drow for any site"
+    "name": "Drawing"
+  , "description": "Drowing on any website."
   , "version": "0.1.0"
   , "permissions": [
       "http://*/*"
