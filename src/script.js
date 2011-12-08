@@ -72,7 +72,7 @@
         document.addEventListener("mousemove", onmousemove, true);
         document.addEventListener("mouseup", onmouseup, true);
         document.addEventListener("keydown", onkeydown, true);
-        document.addEventListener("click", onclick, true);
+        window.addEventListener("click", onclick, true);
         body.appendChild(canvas);
       },
       change: function(params) {
