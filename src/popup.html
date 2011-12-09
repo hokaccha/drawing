@@ -99,7 +99,7 @@ function sendRequest(params, callback) {
 }
 
 chrome.tabs.getSelected(null, function(tab) {
-	if (!/^http/.test(tab.url) || /^https:\/\/chrome\.google\.com\/webstore\//.test(tab.url)) {
+	if (/^(chrome|https:\/\/chrome\.google\.com\/webstore\/)/.test(tab.url)) {
 		document.querySelector(".page-error").style.display = "block";
 	}
 	else {
