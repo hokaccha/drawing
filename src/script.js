@@ -68,11 +68,11 @@
         ctx = canvas.getContext('2d');
         ctx.strokeStyle = color = params.color;
         ctx.lineWidth = lineWidth = params.lineWidth;
-        window.addEventListener("mousedown", onmousedown, true);
-        window.addEventListener("mousemove", onmousemove, true);
-        window.addEventListener("mouseup", onmouseup, true);
-        window.addEventListener("keydown", onkeydown, true);
-        window.addEventListener("click", onclick, true);
+        document.addEventListener("mousedown", onmousedown, true);
+        document.addEventListener("mousemove", onmousemove, true);
+        document.addEventListener("mouseup", onmouseup, true);
+        document.addEventListener("keydown", onkeydown, true);
+        document.addEventListener("click", onclick, true);
         body.appendChild(canvas);
       },
       change: function(params) {
@@ -84,11 +84,11 @@
         }
       },
       end: function(params) {
-        window.removeEventListener("mousedown", onmousedown, true);
-        window.removeEventListener("mousemove", onmousemove, true);
-        window.removeEventListener("mouseup", onmouseup, true);
-        window.removeEventListener("keydown", onkeydown, true);
-        window.removeEventListener("click", onclick, true);
+        document.removeEventListener("mousedown", onmousedown, true);
+        document.removeEventListener("mousemove", onmousemove, true);
+        document.removeEventListener("mouseup", onmouseup, true);
+        document.removeEventListener("keydown", onkeydown, true);
+        window.removeEventListener("onclick", onclick, true);
         body.removeChild(canvas);
         canvas = null;
       }
