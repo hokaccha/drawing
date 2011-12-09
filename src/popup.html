@@ -34,8 +34,23 @@ p {
 #lineWidth {
 	width: 30px;
 }
+.page {
+	display: none;
+}
+.page-error {
+	font-size: 13px;
+	padding: 30px 0;
+	font-weight: bold;
+	color: #C00;
+	text-align: center;
+}
 </style>
 </head>
+<body>
+<div class="page page-error">
+	<p>This page can not draw.</p>
+</div>
+<div class="page page-main">
 <ul id="colors">
 	<li class="selected">red</li>
 	<li>green</li>
@@ -50,7 +65,7 @@ p {
 	<button id="start">start</button>
 	<button id="end" disabled>end</button>
 </p>
-<body>
+</div>
 <script>
 var lineWidth = document.getElementById("lineWidth");
 var colors = [].slice.call(document.querySelectorAll("#colors li"));
@@ -82,6 +97,15 @@ function sendRequest(params, callback) {
 		chrome.tabs.sendRequest(tab.id, params, callback);
 	});
 }
+
+chrome.tabs.getSelected(null, function(tab) {
+	if (!/^http/.test(tab.url) || /^https:\/\/chrome\.google\.com\/webstore\//.test(tab.url)) {
+		document.querySelector(".page-error").style.display = "block";
+	}
+	else {
+		document.querySelector(".page-main").style.display = "block";
+	}
+});
 
 sendRequest(function(response) {
 	if (response.isStart) {
